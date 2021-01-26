@@ -1,25 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from "react";
+import axios from "axios";
+import "./App.css";
+import Header from "./components/Header";
+import QuizPage from "./components/Quiz-Page";
 
-function App() {
+const App = () => {
+  const [questions, setQuestions] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const fetchQuestions = async () => {
+    let items = await axios(
+      `https://opentdb.com/api.php?amount=10&category=27&difficulty=easy&type=boolean`
+    );
+    setQuestions(items.data.results);
+    console.log(questions);
+  };
+
+  useEffect(() => {
+    fetchQuestions();
+  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Header />
+      <QuizPage questions={questions} />
+    </>
   );
-}
-
+};
 export default App;
